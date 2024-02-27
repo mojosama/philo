@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 11:36:13 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/27 13:39:12 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/02/27 14:26:16 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,34 +24,10 @@ static t_philo	*ft_create_philo(int number)
 	return (ph);
 }
 
-// static void	ft_add_philo(t_diner *d, t_philo *new)
-// {
-// 	t_philo	*last;
-// 	t_philo	*first;
-
-// 	if (d->ph == NULL)
-// 	{
-// 		d->ph = new;
-// 		d->ph->prev = d->ph;
-// 	}
-// 	else
-// 	{
-// 		first = d->ph;
-// 		if (first->prev)
-// 			last = first->prev;
-// 		else
-// 			last = first;
-// 		new->prev = last;
-// 		new->next = first;
-// 		first->prev = new;
-// 		last->next = new;
-// 	}
-// }
-
 static void	ft_init_philos(t_diner *d)
 {
 	int	i;
-	
+
 	d->ph = (t_philo **)malloc(sizeof(t_philo *) * d->number_of_philosophers);
 	if (!d->ph)
 		return ;

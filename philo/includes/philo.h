@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:55:02 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/27 13:16:39 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/02/27 14:27:54 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@
 # include <pthread.h>
 # include <stdbool.h>
 
-typedef struct	s_philo
+typedef struct s_philo
 {
 	int		number;
-	bool 	alive;
+	bool	alive;
 }				t_philo;
 
-typedef struct	s_diner
+typedef struct s_diner
 {
 	t_philo	**ph;
 	int		number_of_philosophers;
