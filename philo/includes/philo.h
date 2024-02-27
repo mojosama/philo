@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:55:02 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/27 11:47:38 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/02/27 13:16:39 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@
 # include <stdlib.h>
 # include <time.h>
 # include <pthread.h>
+# include <stdbool.h>
 
 typedef struct	s_philo
 {
 	int		number;
-	t_philo	*next;
-	t_philo	*prev;
+	bool 	alive;
 }				t_philo;
 
 typedef struct	s_diner
 {
-	t_philo	*ph;
+	t_philo	**ph;
 	int		number_of_philosophers;
 	int		time_to_die;
 	int		time_to_eat;

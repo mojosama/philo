@@ -18,20 +18,17 @@ SRC_FILES	=	main	lib_utils	init
 SRCS = $(foreach file,$(SRC_FILES),$(foreach dir,$(SRC_DIR),$(dir)$(file).c))
 OBJS = $(foreach file,$(SRC_FILES),$(foreach dir,$(OBJ_DIR),$(dir)$(file).o))
 
-DIR_INCS	=	includes/			\
-				$(MLX_INCLUDES)
+DIR_INCS	=	includes/
 
 INCLUDES	=	$(addprefix -I , $(DIR_INCS))
-
-LIBS = -lm $(MLX_L) -lXext -lX11
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(MLX_MAKE)
-	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(FLAGS) $(OBJS) -o $(NAME)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADERS)| $(OBJ_DIR)
+#	RAJOUTER $(HEADERS) AUX DEPENDENCES
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c| $(OBJ_DIR)
 	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_DIR):
@@ -48,4 +45,4 @@ re: fclean all
 debug:
 	@$(MAKE) -j FLAGS="$(DEBUG_CFLAGS)"
 
-.PHONY:  all clean fclean re fast debug
+.PHONY:  all clean fclean re debug

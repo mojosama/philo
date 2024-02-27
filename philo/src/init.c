@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 11:36:13 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/27 12:04:48 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/02/27 13:39:12 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,44 @@ static t_philo	*ft_create_philo(int number)
 	if (!ph)
 		return (NULL);
 	ph->number = number;
-	ph->next = NULL;
-	ph->prev = NULL;
+	ph->alive = true;
+	return (ph);
 }
 
-static void	ft_add_philo(t_diner *d, t_philo *new)
-{
-	t_philo	*last;
+// static void	ft_add_philo(t_diner *d, t_philo *new)
+// {
+// 	t_philo	*last;
+// 	t_philo	*first;
 
-	if (d->ph == NULL)
-		d->ph = new;
-	else
-	{
-		last = d->ph->prev;
-		new->prev = last;
-		new->next = d->ph;
-		d->ph->prev = new;
-		last->next = new;
-	}
-}
+// 	if (d->ph == NULL)
+// 	{
+// 		d->ph = new;
+// 		d->ph->prev = d->ph;
+// 	}
+// 	else
+// 	{
+// 		first = d->ph;
+// 		if (first->prev)
+// 			last = first->prev;
+// 		else
+// 			last = first;
+// 		new->prev = last;
+// 		new->next = first;
+// 		first->prev = new;
+// 		last->next = new;
+// 	}
+// }
 
 static void	ft_init_philos(t_diner *d)
 {
-	t_philo	*ph;
-	int		i;
-
+	int	i;
+	
+	d->ph = (t_philo **)malloc(sizeof(t_philo *) * d->number_of_philosophers);
+	if (!d->ph)
+		return ;
 	i = 0;
 	while (i++ < d->number_of_philosophers)
-	{
-		ft_add_philo(d, ft_create_philo(i));
-	}
+		d->ph[i - 1] = ft_create_philo(i);
 }
 
 void	ft_init(t_diner *d, int ac, char **av)
@@ -63,4 +71,5 @@ void	ft_init(t_diner *d, int ac, char **av)
 		d->number_of_times_each_philosopher_must_eat = ft_atoi(av[5]);
 		// peut-etre dans une autre boucle pour faire une fonction avec et une sans limite
 	}
+	ft_init_philos(d);
 }
