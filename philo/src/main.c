@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:58:41 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/27 14:25:57 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/02/28 13:17:06 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static void	print_param_error(void)
 {
 	printf("Incorrect parameters. Command should be as follows:\n");
-	printf("./philo <number_of_philosophers> <time_to_die> <time_to_eat> \
-			<time_to_sleep> [<number_of_times_each_philosopher_must_eat>]\n");
+	printf("./philo <number_of_philosophers> <time_to_die> <time_to_eat> ");
+	printf("<time_to_sleep> [<number_of_times_each_philosopher_must_eat>]\n");
 	printf("(Last one is optional.)\n");
 }
 
@@ -62,10 +62,20 @@ void	ft_free(t_diner *d)
 	int	i;
 
 	i = 0;
-	while (i < d->number_of_philosophers)
-		free(d->ph[i++]);
-	free(d->ph);
-	free(d);
+	if (d)
+	{
+		if (d->ph)
+		{
+			while (i < d->number_of_philosophers)
+			{
+				if (d->ph[i])
+					free(d->ph[i]);
+				i++;
+			}
+			free(d->ph);
+		}
+		free(d);
+	}
 }
 
 int	main(int ac, char **av)
@@ -79,9 +89,9 @@ int	main(int ac, char **av)
 			return (1);
 		ft_init(d, ac, av);
 		test_print(d);
+		ft_free(d);
 	}
 	else
 		print_param_error();
-	ft_free(d);
 	return (0);
 }
