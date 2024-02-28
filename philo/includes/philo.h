@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:55:02 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/27 14:27:54 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/02/28 15:26:52 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,46 @@
 
 # include <stdio.h>
 # include <stdlib.h>
-# include <time.h>
+# include <unistd.h>
+# include <sys/time.h>
 # include <pthread.h>
 # include <stdbool.h>
+# include <limits.h>
+
+typedef struct s_fork
+{
+	pthread_mutex_t	mutex;
+	int				id;
+}				t_fork;
 
 typedef struct s_philo
 {
-	int		number;
-	bool	alive;
+	int			number;
+	bool		alive;
+	int			meals;
+	t_fork		*right_fork;
+	t_fork		*left_fork;
+	pthread_t	thread;
+	long		last_meal;
 }				t_philo;
 
 typedef struct s_diner
 {
 	t_philo	**ph;
-	int		number_of_philosophers;
+	t_fork	*forks;
+	int		number_of_philos;
 	int		time_to_die;
 	int		time_to_eat;
 	int		time_to_sleep;
-	int		number_of_times_each_philosopher_must_eat;
+	int		number_of_times_philos_must_eat;
+	long	start_time;
+	bool	end;
 }				t_diner;
 
 /*		lib_utils.c		*/
 int		ft_atoi(const char *str);
 
 /*		init.c		*/
-void	ft_init(t_diner *d, int ac, char **av);
+int		ft_init(t_diner *d, int ac, char **av);
 
 #endif
