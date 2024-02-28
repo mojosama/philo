@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:58:41 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/28 15:27:20 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/02/28 17:23:44 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,21 @@ void	ft_free(t_diner *d)
 {
 	int	i;
 
-	i = 0;
 	if (d)
 	{
-		if (d->ph)
+		i = 0;
+		while (i < d->number_of_philos)
 		{
-			while (i < d->number_of_philos)
-			{
-				if (d->ph[i])
-					free(d->ph[i]);
-				i++;
-			}
-			free(d->ph);
+			if (d->ph && d->ph[i])
+				free(d->ph[i]);
+			if (d->forks && d->forks[i])
+				free(d->forks[i]);
+			i++;
 		}
+		if (d->ph)
+			free(d->ph);
+		if (d->forks)
+			free(d->forks);
 		free(d);
 	}
 }
@@ -89,7 +91,8 @@ int	main(int ac, char **av)
 		d = (t_diner *)malloc(sizeof(t_diner));
 		if (!d)
 			return (1);
-		ft_init(d, ac, av);
+		if (!ft_init(d, ac, av))
+			return (ft_free(d), 1);
 		test_print(d);
 		ft_free(d);
 	}

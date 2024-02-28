@@ -13,7 +13,7 @@ HEADERS	=	philo.h
 SRC_DIR	=	src/
 OBJ_DIR	=	obj/
 
-SRC_FILES	=	main	lib_utils	init
+SRC_FILES	=	main	lib_utils	init	diner
 
 SRCS = $(foreach file,$(SRC_FILES),$(foreach dir,$(SRC_DIR),$(dir)$(file).c))
 OBJS = $(foreach file,$(SRC_FILES),$(foreach dir,$(OBJ_DIR),$(dir)$(file).o))

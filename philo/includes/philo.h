@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:55:02 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/28 15:26:52 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/02/28 16:51:58 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,16 @@ typedef struct s_philo
 	int			number;
 	bool		alive;
 	int			meals;
-	t_fork		*right_fork;
-	t_fork		*left_fork;
 	pthread_t	thread;
+	t_fork		*left_fork;
+	t_fork		*right_fork;
 	long		last_meal;
 }				t_philo;
 
 typedef struct s_diner
 {
 	t_philo	**ph;
-	t_fork	*forks;
+	t_fork	**forks;
 	int		number_of_philos;
 	int		time_to_die;
 	int		time_to_eat;
@@ -56,5 +56,8 @@ int		ft_atoi(const char *str);
 
 /*		init.c		*/
 int		ft_init(t_diner *d, int ac, char **av);
+
+/*		diner.c		*/
+void	*ft_dining(t_diner *d);
 
 #endif
