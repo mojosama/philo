@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:58:41 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/28 17:23:44 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/07 18:06:40 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ static int	check_params(int ac, char **av)
 	return (1);
 }
 
-void	test_print(t_diner *d)
+void	test_print(t_dinner *d)
 {
 	int		i;
 
 	printf("Number of philosophers : %d\n", d->number_of_philos);
-	printf("Time to die : %d\n", d->time_to_die);
-	printf("Time to eat : %d\n", d->time_to_eat);
-	printf("Time to sleep : %d\n", d->time_to_sleep);
+	printf("Time to die : %ld usec\n", d->time_to_die);
+	printf("Time to eat : %ld usec\n", d->time_to_eat);
+	printf("Time to sleep : %ld usec\n", d->time_to_sleep);
 	i = 0;
 	printf("Existing philosophers :\n");
 	while (i < d->number_of_philos)
@@ -59,7 +59,7 @@ void	test_print(t_diner *d)
 	}
 }
 
-void	ft_free(t_diner *d)
+void	ft_free(t_dinner *d)
 {
 	int	i;
 
@@ -71,29 +71,34 @@ void	ft_free(t_diner *d)
 			if (d->ph && d->ph[i])
 				free(d->ph[i]);
 			if (d->forks && d->forks[i])
+			{
+				pthread_mutex_destroy(&d->forks[i]->mutex);
 				free(d->forks[i]);
+			}
 			i++;
 		}
 		if (d->ph)
 			free(d->ph);
 		if (d->forks)
 			free(d->forks);
+		pthread_mutex_destroy(&d->mutex);
 		free(d);
 	}
 }
 
 int	main(int ac, char **av)
 {
-	t_diner	*d;
+	t_dinner	*d;
 
 	if (check_params(ac, av))
 	{
-		d = (t_diner *)malloc(sizeof(t_diner));
+		d = (t_dinner *)malloc(sizeof(t_dinner));
 		if (!d)
 			return (1);
 		if (!ft_init(d, ac, av))
 			return (ft_free(d), 1);
-		test_print(d);
+		if (!ft_start_dinner(d))
+			return (ft_free(d), 1);
 		ft_free(d);
 	}
 	else

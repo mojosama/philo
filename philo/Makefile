@@ -13,7 +13,14 @@ HEADERS	=	philo.h
 SRC_DIR	=	src/
 OBJ_DIR	=	obj/
 
-SRC_FILES	=	main	lib_utils	init	diner
+SRC_FILES	=	main	\
+				lib_utils	\
+				init	\
+				dinner	\
+				thread_utils	\
+				time	\
+				monitoring	\
+				simulation
 
 SRCS = $(foreach file,$(SRC_FILES),$(foreach dir,$(SRC_DIR),$(dir)$(file).c))
 OBJS = $(foreach file,$(SRC_FILES),$(foreach dir,$(OBJ_DIR),$(dir)$(file).o))
@@ -28,21 +35,21 @@ $(NAME): $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) -o $(NAME)
 
 #	RAJOUTER $(HEADERS) AUX DEPENDENCES
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c| $(OBJ_DIR)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
 	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
-debug:
+debug: clean
 	@$(MAKE) -j FLAGS="$(DEBUG_CFLAGS)"
 
 .PHONY:  all clean fclean re debug

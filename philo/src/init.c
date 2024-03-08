@@ -6,41 +6,41 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 11:36:13 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/28 17:13:50 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/08 13:18:24 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static t_philo	*ft_create_philo(int number, t_diner *d)
+static t_philo	*ft_create_philo(int number, t_dinner *d)
 {
 	t_philo	*ph;
-	int		err;
 
 	ph = malloc(sizeof(t_philo));
 	if (!ph)
 		return (NULL);
 	ph->number = number;
-	ph->alive = true;
+	ph->full = false;
 	ph->meals = 0;
-	err = pthread_create(ph->thread, NULL, ft_dining, d); // TODO : routine
-	if (err != 0)
-		return (free(ph), NULL);
+	ph->table = d;
+	ph->last_meal = ft_get_utime();
 	ph->left_fork = d->forks[number - 1];
 	if (number != d->number_of_philos)
 		ph->right_fork = d->forks[number];
 	else
 		ph->right_fork = d->forks[0];
+	if (pthread_mutex_init(&ph->mutex, NULL) != 0)
+		return (free(ph), NULL);
 	return (ph);
 }
 
-static int	ft_init_philos(t_diner *d)
+static int	ft_init_philos(t_dinner *d)
 {
 	int	i;
 
 	d->ph = (t_philo **)malloc(sizeof(t_philo *) * d->number_of_philos);
 	if (!d->ph)
-		return ;
+		return (0);
 	i = -1;
 	while (++i < d->number_of_philos)
 	{
@@ -51,10 +51,10 @@ static int	ft_init_philos(t_diner *d)
 	return (1);
 }
 
-static int	ft_init_forks(t_diner *d)
+static int	ft_init_forks(t_dinner *d)
 {
 	int	i;
-	
+
 	d->forks = (t_fork **)malloc(sizeof(t_fork *) * d->number_of_philos);
 	if (!d->forks)
 		return (0);
@@ -66,29 +66,34 @@ static int	ft_init_forks(t_diner *d)
 			return (0);
 		if (pthread_mutex_init(&d->forks[i]->mutex, NULL) != 0)
 			return (0);
+		d->forks[i]->id = i;
 		i++;
 	}
 	return (1);
 }
 
-int	ft_init(t_diner *d, int ac, char **av)
+int	ft_init(t_dinner *d, int ac, char **av)
 {
-	d->number_of_philos = ft_atoi(av[1]);
-	d->time_to_die = ft_atoi(av[2]);
-	d->time_to_eat = ft_atoi(av[3]);
-	d->time_to_sleep = ft_atoi(av[4]);
-	if (d->number_of_philos == -1 || d->time_to_die == -1 || d->time_to_eat == -1 || d->time_to_sleep == -1)
+	d->number_of_philos = (int)ft_atol(av[1]);
+	d->time_to_die = ft_atol(av[2]) * 1e3;
+	d->time_to_eat = ft_atol(av[3]) * 1e3;
+	d->time_to_sleep = ft_atol(av[4]) * 1e3;
+	if (d->number_of_philos == -1 || d->time_to_die == -1
+		|| d->time_to_eat == -1 || d->time_to_sleep == -1)
 		return (0);
 	if (ac == 6)
 	{
-		d->number_of_times_philos_must_eat = ft_atoi(av[5]);
+		d->number_of_times_philos_must_eat = (int)ft_atol(av[5]);
 		if (d->number_of_times_philos_must_eat == -1)
 			return (0);
-		// peut-etre dans une autre boucle pour faire une fonction avec et une sans limite
 	}
-	if (!ft_init_forks(d))
+	else
+		d->number_of_times_philos_must_eat = -42;
+	d->threads_ready = false;
+	d->end = false;
+	if (pthread_mutex_init(&d->mutex, NULL) != 0)
 		return (0);
-	if (!ft_init_philos(d))
+	if (!ft_init_forks(d) || !ft_init_philos(d))
 		return (0);
 	return (1);
 }

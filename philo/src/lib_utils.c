@@ -6,13 +6,13 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:55:20 by hlopez            #+#    #+#             */
-/*   Updated: 2024/02/28 15:20:01 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/06 04:47:56 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_atoi(const char *str)
+long	ft_atol(const char *str)
 {
 	size_t			i;
 	long long int	res;
@@ -30,5 +30,5 @@ int	ft_atoi(const char *str)
 			return (-1);
 		i++;
 	}
-	return ((int)res);
+	return ((long)res);
 }
