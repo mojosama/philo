@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:58:41 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/07 18:06:40 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/08 13:42:02 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,9 @@ int	main(int ac, char **av)
 			return (1);
 		if (!ft_init(d, ac, av))
 			return (ft_free(d), 1);
-		if (!ft_start_dinner(d))
-			return (ft_free(d), 1);
+		if (d->number_of_times_philos_must_eat != 0)
+			if (!ft_start_dinner(d))
+				return (ft_free(d), 1);
 		ft_free(d);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:47:50 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/08 13:20:47 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/08 13:42:16 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,7 @@ int	ft_start_dinner(t_dinner *d)
 	int	i;
 
 	i = -1;
-	if (d->number_of_times_philos_must_eat == 0)
-		return (1);
-	else if (d->number_of_philos == 1)
+	if (d->number_of_philos == 1)
 	{
 		if (pthread_create(&d->ph[0]->thread, NULL, ft_dining_solo, d->ph[0]))
 			return (0);
