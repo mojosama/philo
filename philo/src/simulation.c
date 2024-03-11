@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 18:43:10 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/08 13:15:18 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/09 16:03:08 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ void	ft_eat(t_philo *philo)
 		ft_write_status(philo, FORK);
 	}
 	ft_write_status(philo, EAT);
+	philo->last_meal = ft_get_utime();
 	philo->meals++;
 	if (philo->table->number_of_times_philos_must_eat > 0
 		&& philo->meals >= philo->table->number_of_times_philos_must_eat)
 		ft_set_bool(&philo->mutex, &philo->full, true);
 	ft_usleep(philo->table->time_to_eat, philo->table);
-	philo->last_meal = ft_get_utime();
 	pthread_mutex_unlock(&philo->right_fork->mutex);
 	pthread_mutex_unlock(&philo->left_fork->mutex);
 }
