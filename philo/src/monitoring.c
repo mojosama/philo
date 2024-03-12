@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:23:45 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/08 13:44:25 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/12 18:46:06 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	*ft_monitoring(void *data)
 		while (++i < d->number_of_philos && !ft_dinner_end(d))
 		{
 			if (ft_philo_died(d->ph[i]))
-				ft_death(d->ph[i]);
+				return (ft_death(d->ph[i]), NULL);
 			else if (d->ph[i]->full)
 				full++;
 			if (full == d->number_of_philos)
@@ -57,13 +57,17 @@ void	ft_write_status(t_philo *philo, t_status status)
 
 	elapsed = (long)((ft_get_utime() - philo->table->start_time) * 0.001);
 	if (status == EAT && !ft_dinner_end(philo->table))
-		printf("%ld %d is eating.\n", elapsed, philo->number);
+		printf("%ld %d is eating. 🍝\n", elapsed, philo->number);
 	else if (status == SLEEP && !ft_dinner_end(philo->table))
-		printf("%ld %d is sleeping.\n", elapsed, philo->number);
+		printf("%ld %d is sleeping. 💤\n", elapsed, philo->number);
 	else if (status == THINK && !ft_dinner_end(philo->table))
-		printf("%ld %d is thinking.\n", elapsed, philo->number);
+		printf("%ld %d is thinking. 💭\n", elapsed, philo->number);
 	else if (status == FORK && !ft_dinner_end(philo->table))
-		printf("%ld %d has taken a fork.\n", elapsed, philo->number);
+		printf("%ld %d has taken a fork. 🍴\n", elapsed, philo->number);
 	else if (status == DEATH && !ft_dinner_end(philo->table))
-		printf("%ld %d died.\n", elapsed, philo->number);
+		printf("%ld %d died. ☠️\n", elapsed, philo->number);
+	else if (status == FULL && !ft_dinner_end(philo->table))
+		printf("%ld %d is full. 😋\n", elapsed, philo->number);
+	else if (!ft_dinner_end(philo->table))
+		error_exit("Wrong status passed as argument.\n");
 }

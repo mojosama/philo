@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:58:41 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/08 13:42:02 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/12 14:57:12 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	ft_free(t_dinner *d)
 				free(d->ph[i]);
 			if (d->forks && d->forks[i])
 			{
-				pthread_mutex_destroy(&d->forks[i]->mutex);
+				ft_safe_mutex_handle(&d->forks[i]->mutex, DESTROY);
 				free(d->forks[i]);
 			}
 			i++;
@@ -81,7 +81,7 @@ void	ft_free(t_dinner *d)
 			free(d->ph);
 		if (d->forks)
 			free(d->forks);
-		pthread_mutex_destroy(&d->mutex);
+		ft_safe_mutex_handle(&d->mutex, DESTROY);
 		free(d);
 	}
 }

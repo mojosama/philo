@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:10:34 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/07 17:59:20 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/12 14:56:54 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,35 @@
 
 void	ft_set_bool(pthread_mutex_t *mutex, bool *dest, bool value)
 {
-	pthread_mutex_lock(mutex);
+	ft_safe_mutex_handle(mutex, LOCK);
 	*dest = value;
-	pthread_mutex_unlock(mutex);
+	ft_safe_mutex_handle(mutex, UNLOCK);
 }
 
 bool	ft_get_bool(pthread_mutex_t *mutex, bool *dest)
 {
 	bool	res;
 
-	pthread_mutex_lock(mutex);
+	ft_safe_mutex_handle(mutex, LOCK);
 	res = *dest;
-	pthread_mutex_unlock(mutex);
+	ft_safe_mutex_handle(mutex, UNLOCK);
 	return (res);
 }
 
 void	ft_set_long(pthread_mutex_t *mutex, long *dest, long value)
 {
-	pthread_mutex_lock(mutex);
+	ft_safe_mutex_handle(mutex, LOCK);
 	*dest = value;
-	pthread_mutex_unlock(mutex);
+	ft_safe_mutex_handle(mutex, UNLOCK);
 }
 
 long	ft_get_long(pthread_mutex_t *mutex, long *dest)
 {
 	long	res;
 
-	pthread_mutex_lock(mutex);
+	ft_safe_mutex_handle(mutex, LOCK);
 	res = *dest;
-	pthread_mutex_unlock(mutex);
+	ft_safe_mutex_handle(mutex, UNLOCK);
 	return (res);
 }
 

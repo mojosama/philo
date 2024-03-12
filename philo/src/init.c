@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 11:36:13 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/08 13:18:24 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/12 14:57:05 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@ static t_philo	*ft_create_philo(int number, t_dinner *d)
 	ph->meals = 0;
 	ph->table = d;
 	ph->last_meal = ft_get_utime();
-	ph->left_fork = d->forks[number - 1];
+	ph->right_fork = d->forks[number - 1];
 	if (number != d->number_of_philos)
-		ph->right_fork = d->forks[number];
+		ph->left_fork = d->forks[number];
 	else
-		ph->right_fork = d->forks[0];
-	if (pthread_mutex_init(&ph->mutex, NULL) != 0)
-		return (free(ph), NULL);
+		ph->left_fork = d->forks[0];
+	ft_safe_mutex_handle(&ph->mutex, INIT);
 	return (ph);
 }
 
@@ -64,8 +63,7 @@ static int	ft_init_forks(t_dinner *d)
 		d->forks[i] = malloc(sizeof(t_fork));
 		if (!d->forks[i])
 			return (0);
-		if (pthread_mutex_init(&d->forks[i]->mutex, NULL) != 0)
-			return (0);
+		ft_safe_mutex_handle(&d->forks[i]->mutex, INIT);
 		d->forks[i]->id = i;
 		i++;
 	}
@@ -91,8 +89,7 @@ int	ft_init(t_dinner *d, int ac, char **av)
 		d->number_of_times_philos_must_eat = -42;
 	d->threads_ready = false;
 	d->end = false;
-	if (pthread_mutex_init(&d->mutex, NULL) != 0)
-		return (0);
+	ft_safe_mutex_handle(&d->mutex, INIT);
 	if (!ft_init_forks(d) || !ft_init_philos(d))
 		return (0);
 	return (1);
