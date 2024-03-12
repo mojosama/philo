@@ -20,7 +20,8 @@ SRC_FILES	=	main	\
 				thread_utils	\
 				time	\
 				monitoring	\
-				simulation
+				simulation	\
+				safe_pthread
 
 SRCS = $(foreach file,$(SRC_FILES),$(foreach dir,$(SRC_DIR),$(dir)$(file).c))
 OBJS = $(foreach file,$(SRC_FILES),$(foreach dir,$(OBJ_DIR),$(dir)$(file).o))

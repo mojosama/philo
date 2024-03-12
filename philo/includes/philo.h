@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:55:02 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/08 11:39:00 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/12 17:53:55 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,16 @@ typedef enum e_status
 	THINK,
 	FORK,
 	DEATH,
+	FULL,
 }	t_status;
+
+typedef enum e_action
+{
+	INIT,
+	DESTROY,
+	LOCK,
+	UNLOCK,
+}	t_action;
 
 typedef struct s_fork
 {
@@ -67,13 +76,13 @@ typedef struct s_dinner
 
 /*		lib_utils.c		*/
 long	ft_atol(const char *str);
+void	error_exit(const char *error);
 
 /*		init.c		*/
 int		ft_init(t_dinner *d, int ac, char **av);
 
 /*		dinner.c		*/
 void	wait_all_threads(t_dinner *d);
-void	*ft_dining(void *data);
 int		ft_start_dinner(t_dinner *d);
 
 /*		time.c		*/
@@ -97,5 +106,10 @@ void	ft_eat(t_philo *philo);
 void	ft_sleep(t_philo *philo);
 void	ft_think(t_philo *philo);
 void	ft_death(t_philo *philo);
+
+/*		safe_pthread.c		*/
+void	ft_safe_pthread_create(pthread_t *thread, void *(*f)(void *), void *d);
+void	ft_safe_pthread_join(pthread_t thread);
+void	ft_safe_mutex_handle(pthread_mutex_t *mutex, t_action action);
 
 #endif
