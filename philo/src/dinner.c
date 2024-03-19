@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:47:50 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/19 12:42:33 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/19 15:24:20 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	ft_start_dinner(t_dinner *d)
 		while (++i < d->number_of_philos)
 			ft_safe_pthread_create(&d->ph[i]->thread, ft_dining, d->ph[i]);
 	ft_safe_pthread_create(&d->monitor, ft_monitoring, d);
-	ft_set_bool(&d->mutex, &d->threads_ready, true);
 	ft_set_long(&d->mutex, &d->start_time, ft_get_utime());
+	ft_set_bool(&d->mutex, &d->threads_ready, true);
 	i = -1;
 	while (++i < d->number_of_philos)
 		ft_safe_pthread_join(d->ph[i]->thread);
