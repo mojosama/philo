@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:23:45 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/18 19:06:34 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/19 15:06:42 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ static bool	ft_philo_died(t_philo *philo)
 	if (elapsed > philo->table->time_to_die
 		&& start_time < last_meal)
 	{
-		printf("Elapsed since:\n");
-		printf("beginning: %ld\n", since_beginning);
-		printf("last meal: %ld\n", elapsed);
-		printf("meals: %ld\n", ft_get_long(&philo->mutex, &philo->meals));
+		printf("Elapsed since:\n"); // delete later
+		printf("beginning: %ld\n", since_beginning); // delete later
+		printf("last meal: %ld\n", elapsed); // delete later
+		printf("meals: %ld\n", ft_get_long(&philo->mutex, &philo->meals)); // delete later
 		return (true);
 	}
 	else
@@ -72,17 +72,20 @@ void	ft_write_status(t_philo *philo, t_status status)
 	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
 	elapsed = (long)((ft_get_utime() - start_time) * 0.001);
 	if (status == EAT && !ft_dinner_end(philo->table))
-		printf("%ld %d is eating. 🍝\n", elapsed, philo->number);
+		printf("🍝 %ld %d is eating. 🍝\n", elapsed, philo->number);
 	else if (status == SLEEP && !ft_dinner_end(philo->table))
-		printf("%ld %d is sleeping. 💤\n", elapsed, philo->number);
+		printf("💤 %ld %d is sleeping. 💤\n", elapsed, philo->number);
 	else if (status == THINK && !ft_dinner_end(philo->table))
-		printf("%ld %d is thinking. 💭\n", elapsed, philo->number);
+		printf("💭 %ld %d is thinking. 💭\n", elapsed, philo->number);
 	else if (status == FORK && !ft_dinner_end(philo->table))
-		printf("%ld %d has taken a fork. 🍴\n", elapsed, philo->number);
+		printf("🍴 %ld %d has taken a fork. 🍴\n", elapsed, philo->number);
 	else if (status == DEATH && !ft_dinner_end(philo->table))
-		printf("%ld %d died. ☠️\n", elapsed, philo->number);
+	{
+		ft_set_bool(&philo->table->mutex, &philo->table->end, true);
+		printf("💀 %ld %d died. 💀\n", elapsed, philo->number);
+	}
 	else if (status == FULL && !ft_dinner_end(philo->table))
-		printf("%ld %d is full. 😋\n", elapsed, philo->number);
+		printf("😋 %ld %d is full. 😋\n", elapsed, philo->number);
 	else if (!ft_dinner_end(philo->table))
 		error_exit("Wrong status passed as argument.\n");
 }
