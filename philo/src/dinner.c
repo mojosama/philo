@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:47:50 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/12 18:06:15 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/19 12:42:33 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,16 @@ static void	*ft_dining(void *data)
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
 	ft_set_long(&philo->mutex, &philo->last_meal, ft_get_utime());
-	if (philo->number % 2 != 0)
+	if (philo->number % 2 == 0)
 	{
-		while (!ft_dinner_end(philo->table) && !philo->full)
-		{
-			ft_eat(philo);
-			ft_sleep(philo);
-			ft_think(philo);
-		}
-	}
-	else
-	{
+		ft_think(philo);
 		ft_usleep(500, philo->table);
-		while (!ft_dinner_end(philo->table) && !philo->full)
-		{
-			ft_think(philo);
-			ft_eat(philo);
-			ft_sleep(philo);
-		}
+	}
+	while (!ft_dinner_end(philo->table) && !philo->full)
+	{
+		ft_eat(philo);
+		ft_sleep(philo);
+		ft_think(philo);
 	}
 	return (NULL);
 }
@@ -71,8 +63,8 @@ int	ft_start_dinner(t_dinner *d)
 		while (++i < d->number_of_philos)
 			ft_safe_pthread_create(&d->ph[i]->thread, ft_dining, d->ph[i]);
 	ft_safe_pthread_create(&d->monitor, ft_monitoring, d);
-	d->start_time = ft_get_utime();
 	ft_set_bool(&d->mutex, &d->threads_ready, true);
+	ft_set_long(&d->mutex, &d->start_time, ft_get_utime());
 	i = -1;
 	while (++i < d->number_of_philos)
 		ft_safe_pthread_join(d->ph[i]->thread);

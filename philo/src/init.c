@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 11:36:13 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/12 14:57:05 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/18 18:10:49 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	ft_init_forks(t_dinner *d)
 		if (!d->forks[i])
 			return (0);
 		ft_safe_mutex_handle(&d->forks[i]->mutex, INIT);
-		d->forks[i]->id = i;
+		d->forks[i]->free = true;
 		i++;
 	}
 	return (1);
@@ -81,14 +81,15 @@ int	ft_init(t_dinner *d, int ac, char **av)
 		return (0);
 	if (ac == 6)
 	{
-		d->number_of_times_philos_must_eat = (int)ft_atol(av[5]);
-		if (d->number_of_times_philos_must_eat == -1)
+		d->max_meals = ft_atol(av[5]);
+		if (d->max_meals == -1)
 			return (0);
 	}
 	else
-		d->number_of_times_philos_must_eat = -42;
+		d->max_meals = -42;
 	d->threads_ready = false;
 	d->end = false;
+	d->start_time = 0;
 	ft_safe_mutex_handle(&d->mutex, INIT);
 	if (!ft_init_forks(d) || !ft_init_philos(d))
 		return (0);

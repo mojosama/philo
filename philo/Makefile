@@ -4,7 +4,7 @@ CC		=	gcc
 
 CFLAGS	=	-Wall -Wextra -Werror 
 BASE_DEBUG_CFLAGS	=	$(CFLAGS) -g3
-DEBUG_CFLAGS		=	$(BASE_DEBUG_CFLAGS) -fsanitize=address
+DEBUG_CFLAGS		=	$(BASE_DEBUG_CFLAGS) -fsanitize=thread
 
 FLAGS	=	$(CFLAGS)
 

@@ -6,34 +6,45 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 18:43:10 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/12 17:52:03 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/19 12:34:45 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	ft_take_fork(t_philo *philo, t_fork *fork)
+static void	ft_take_forks(t_philo *philo)
 {
-	ft_safe_mutex_handle(&fork->mutex, LOCK);
-	ft_write_status(philo, FORK);
+	if (philo->left_fork != philo->right_fork)
+	{
+		while (!ft_get_bool(&philo->left_fork->mutex, &philo->left_fork->free))
+			;
+		ft_set_bool(&philo->left_fork->mutex, &philo->left_fork->free, false);
+		ft_write_status(philo, FORK);
+		while (!ft_get_bool(&philo->right_fork->mutex,
+				&philo->right_fork->free))
+			;
+		ft_set_bool(&philo->right_fork->mutex, &philo->right_fork->free, false);
+		ft_write_status(philo, FORK);
+	}
+	else
+		error_exit("Error on forks assignment.\n");
 }
 
 void	ft_eat(t_philo *philo)
 {
-	ft_take_fork(philo, philo->left_fork);
-	ft_take_fork(philo, philo->right_fork);
+	ft_take_forks(philo);
 	ft_write_status(philo, EAT);
-	philo->last_meal = ft_get_utime();
-	philo->meals++;
-	if (philo->table->number_of_times_philos_must_eat > 0
-		&& philo->meals >= philo->table->number_of_times_philos_must_eat)
+	ft_set_long(&philo->mutex, &philo->last_meal, ft_get_utime());
+	ft_set_long(&philo->mutex, &philo->meals, philo->meals + 1);
+	if (philo->table->max_meals > 0
+		&& ft_get_long(&philo->mutex, &philo->meals) >= philo->table->max_meals)
 	{
 		ft_write_status(philo, FULL);
 		ft_set_bool(&philo->mutex, &philo->full, true);
 	}
 	ft_usleep(philo->table->time_to_eat, philo->table);
-	ft_safe_mutex_handle(&philo->right_fork->mutex, UNLOCK);
-	ft_safe_mutex_handle(&philo->left_fork->mutex, UNLOCK);
+	ft_set_bool(&philo->left_fork->mutex, &philo->left_fork->free, true);
+	ft_set_bool(&philo->right_fork->mutex, &philo->right_fork->free, true);
 }
 
 void	ft_sleep(t_philo *philo)

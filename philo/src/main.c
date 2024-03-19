@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:58:41 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/12 14:57:12 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/18 16:25:29 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,6 @@ static int	check_params(int ac, char **av)
 		}
 	}
 	return (1);
-}
-
-void	test_print(t_dinner *d)
-{
-	int		i;
-
-	printf("Number of philosophers : %d\n", d->number_of_philos);
-	printf("Time to die : %ld usec\n", d->time_to_die);
-	printf("Time to eat : %ld usec\n", d->time_to_eat);
-	printf("Time to sleep : %ld usec\n", d->time_to_sleep);
-	i = 0;
-	printf("Existing philosophers :\n");
-	while (i < d->number_of_philos)
-	{
-		printf("Philosopher number %d\n", d->ph[i]->number);
-		i++;
-	}
 }
 
 void	ft_free(t_dinner *d)
@@ -97,7 +80,7 @@ int	main(int ac, char **av)
 			return (1);
 		if (!ft_init(d, ac, av))
 			return (ft_free(d), 1);
-		if (d->number_of_times_philos_must_eat != 0)
+		if (d->max_meals != 0)
 			if (!ft_start_dinner(d))
 				return (ft_free(d), 1);
 		ft_free(d);

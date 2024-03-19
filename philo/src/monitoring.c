@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:23:45 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/12 18:46:06 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/18 19:06:34 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,23 @@
 static bool	ft_philo_died(t_philo *philo)
 {
 	long	elapsed;
+	long	start_time;
+	long	last_meal;
+	long	since_beginning; // delete later
 
-	elapsed = ft_get_utime() - ft_get_long(&philo->mutex, &philo->last_meal);
-	if (elapsed > philo->table->time_to_die)
+	last_meal = ft_get_long(&philo->mutex, &philo->last_meal);
+	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
+	elapsed = ft_get_utime() - last_meal;
+	since_beginning = ft_get_utime() - start_time; // delete later
+	if (elapsed > philo->table->time_to_die
+		&& start_time < last_meal)
+	{
+		printf("Elapsed since:\n");
+		printf("beginning: %ld\n", since_beginning);
+		printf("last meal: %ld\n", elapsed);
+		printf("meals: %ld\n", ft_get_long(&philo->mutex, &philo->meals));
 		return (true);
+	}
 	else
 		return (false);
 }
@@ -39,7 +52,7 @@ void	*ft_monitoring(void *data)
 		{
 			if (ft_philo_died(d->ph[i]))
 				return (ft_death(d->ph[i]), NULL);
-			else if (d->ph[i]->full)
+			else if (ft_get_bool(&d->ph[i]->mutex, &d->ph[i]->full))
 				full++;
 			if (full == d->number_of_philos)
 			{
@@ -54,8 +67,10 @@ void	*ft_monitoring(void *data)
 void	ft_write_status(t_philo *philo, t_status status)
 {
 	long	elapsed;
+	long	start_time;
 
-	elapsed = (long)((ft_get_utime() - philo->table->start_time) * 0.001);
+	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
+	elapsed = (long)((ft_get_utime() - start_time) * 0.001);
 	if (status == EAT && !ft_dinner_end(philo->table))
 		printf("%ld %d is eating. 🍝\n", elapsed, philo->number);
 	else if (status == SLEEP && !ft_dinner_end(philo->table))

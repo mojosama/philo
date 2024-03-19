@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:55:02 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/12 17:53:55 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/18 18:10:49 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ typedef enum e_action
 
 typedef struct s_fork
 {
+	bool			free;
 	pthread_mutex_t	mutex;
-	int				id;
 }				t_fork;
 
 typedef struct s_philo
 {
 	int				number;
 	bool			full;
-	int				meals;
+	long			meals;
 	pthread_t		thread;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
@@ -65,7 +65,7 @@ typedef struct s_dinner
 	int				number_of_philos;
 	long			time_to_eat;
 	long			time_to_sleep;
-	int				number_of_times_philos_must_eat;
+	long			max_meals;
 	long			time_to_die;
 	long			start_time;
 	bool			end;
