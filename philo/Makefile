@@ -23,7 +23,7 @@ SRC_FILES	=	main	\
 				simulation	\
 				safe_pthread
 
-SRCS = $(foreach file,$(SRC_FILES),$(foreach dir,$(SRC_DIR),$(dir)$(file).c))
+SRCS =	$(foreach file,$(SRC_FILES),$(foreach dir,$(SRC_DIR),$(dir)$(file).c))
 OBJS = $(foreach file,$(SRC_FILES),$(foreach dir,$(OBJ_DIR),$(dir)$(file).o))
 
 DIR_INCS	=	includes/
@@ -38,6 +38,14 @@ $(NAME): $(OBJS)
 #	RAJOUTER $(HEADERS) AUX DEPENDENCES
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
 	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+
+# .depend: $(SRCS)
+# 	$(CC) $(FLAGS) -MM @(SRCS)
+
+# $(OBJ_DIR)%.o:
+# 	$(CC) -c $(FLAGS) $< -o $@
+
+# -include .depend
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
