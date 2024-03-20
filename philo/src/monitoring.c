@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:23:45 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/20 14:08:44 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 15:05:15 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ int	ft_write_status(t_philo *philo, t_status status)
 		printf("🍴 %ld %d has taken a fork. 🍴\n", elapsed, philo->number);
 	else if (status == DEATH && !ft_dinner_end(philo->table))
 	{
-		ft_set_bool(&philo->table->mutex, &philo->table->end, true);
+		if (!ft_set_bool(&philo->table->mutex, &philo->table->end, true))
+			return (0);
 		printf("💀 %ld %d died. 💀\n", elapsed, philo->number);
 	}
 	else if (status == FULL && !ft_dinner_end(philo->table))
