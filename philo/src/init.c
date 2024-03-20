@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 11:36:13 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/18 18:10:49 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 14:04:42 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static t_philo	*ft_create_philo(int number, t_dinner *d)
 		ph->left_fork = d->forks[number];
 	else
 		ph->left_fork = d->forks[0];
-	ft_safe_mutex_handle(&ph->mutex, INIT);
+	if (!ft_safe_mutex_handle(&ph->mutex, INIT))
+		return (NULL);
 	return (ph);
 }
 
@@ -63,7 +64,8 @@ static int	ft_init_forks(t_dinner *d)
 		d->forks[i] = malloc(sizeof(t_fork));
 		if (!d->forks[i])
 			return (0);
-		ft_safe_mutex_handle(&d->forks[i]->mutex, INIT);
+		if (!ft_safe_mutex_handle(&d->forks[i]->mutex, INIT))
+			return (0);
 		d->forks[i]->free = true;
 		i++;
 	}
@@ -90,7 +92,8 @@ int	ft_init(t_dinner *d, int ac, char **av)
 	d->threads_ready = false;
 	d->end = false;
 	d->start_time = 0;
-	ft_safe_mutex_handle(&d->mutex, INIT);
+	if (!ft_safe_mutex_handle(&d->mutex, INIT))
+		return (0);
 	if (!ft_init_forks(d) || !ft_init_philos(d))
 		return (0);
 	return (1);

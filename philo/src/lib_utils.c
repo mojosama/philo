@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:55:20 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/12 14:33:55 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 13:33:44 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ long	ft_atol(const char *str)
 	return ((long)res);
 }
 
-void	error_exit(const char *error)
+int	error_exit(const char *error)
 {
 	printf("%s\n", error);
-	exit(EXIT_FAILURE);
+	return (0);
 }

@@ -6,47 +6,57 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:10:34 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/19 13:38:18 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 13:44:22 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-inline void	ft_set_bool(pthread_mutex_t *mutex, bool *dest, bool value)
+inline int	ft_set_bool(pthread_mutex_t *mutex, bool *dest, bool value)
 {
-	ft_safe_mutex_handle(mutex, LOCK);
+	if (!ft_safe_mutex_handle(mutex, LOCK))
+		return (0);
 	*dest = value;
-	ft_safe_mutex_handle(mutex, UNLOCK);
+	if (!ft_safe_mutex_handle(mutex, UNLOCK))
+		return (0);
+	return (1);
 }
 
-bool	ft_get_bool(pthread_mutex_t *mutex, bool *dest)
+int	ft_get_bool(pthread_mutex_t *mutex, bool *dest)
 {
 	bool	res;
 
-	ft_safe_mutex_handle(mutex, LOCK);
+	if (!ft_safe_mutex_handle(mutex, LOCK))
+		return (-1);
 	res = *dest;
-	ft_safe_mutex_handle(mutex, UNLOCK);
+	if (!ft_safe_mutex_handle(mutex, UNLOCK))
+		return (-1);
 	return (res);
 }
 
-inline void	ft_set_long(pthread_mutex_t *mutex, long *dest, long value)
+inline int	ft_set_long(pthread_mutex_t *mutex, long *dest, long value)
 {
-	ft_safe_mutex_handle(mutex, LOCK);
+	if (!ft_safe_mutex_handle(mutex, LOCK))
+		return (0);
 	*dest = value;
-	ft_safe_mutex_handle(mutex, UNLOCK);
+	if (!ft_safe_mutex_handle(mutex, UNLOCK))
+		return (0);
+	return (1);
 }
 
 long	ft_get_long(pthread_mutex_t *mutex, long *dest)
 {
 	long	res;
 
-	ft_safe_mutex_handle(mutex, LOCK);
+	if (!ft_safe_mutex_handle(mutex, LOCK))
+		return (-1);
 	res = *dest;
-	ft_safe_mutex_handle(mutex, UNLOCK);
+	if (!ft_safe_mutex_handle(mutex, UNLOCK))
+		return (-1);
 	return (res);
 }
 
-inline bool	ft_dinner_end(t_dinner *d)
+inline int	ft_dinner_end(t_dinner *d)
 {
 	return (ft_get_bool(&d->mutex, &d->end));
 }

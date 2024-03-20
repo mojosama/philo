@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:55:02 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/18 18:10:49 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 13:56:18 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_dinner
 
 /*		lib_utils.c		*/
 long	ft_atol(const char *str);
-void	error_exit(const char *error);
+int		error_exit(const char *error);
 
 /*		init.c		*/
 int		ft_init(t_dinner *d, int ac, char **av);
@@ -91,25 +91,25 @@ long	ft_get_utime(void);
 void	ft_usleep(long usec, t_dinner *d);
 
 /*		thread_utils.c		*/
-void	ft_set_bool(pthread_mutex_t *mutex, bool *dest, bool value);
-bool	ft_get_bool(pthread_mutex_t *mutex, bool *dest);
-void	ft_set_long(pthread_mutex_t *mutex, long *dest, long value);
+int		ft_set_bool(pthread_mutex_t *mutex, bool *dest, bool value);
+int		ft_get_bool(pthread_mutex_t *mutex, bool *dest);
+int		ft_set_long(pthread_mutex_t *mutex, long *dest, long value);
 long	ft_get_long(pthread_mutex_t *mutex, long *dest);
-bool	ft_dinner_end(t_dinner *d);
+int		ft_dinner_end(t_dinner *d);
 
 /*		monitoring.c	*/
+int		ft_death(t_philo *philo);
 void	*ft_monitoring(void *data);
-void	ft_write_status(t_philo *philo, t_status status);
+int		ft_write_status(t_philo *philo, t_status status);
 
 /*		simulation.c	*/
-void	ft_eat(t_philo *philo);
-void	ft_sleep(t_philo *philo);
-void	ft_think(t_philo *philo);
-void	ft_death(t_philo *philo);
+int		ft_eat(t_philo *philo);
+int		ft_sleep(t_philo *philo);
+int		ft_think(t_philo *philo);
 
 /*		safe_pthread.c		*/
-void	ft_safe_pthread_create(pthread_t *thread, void *(*f)(void *), void *d);
-void	ft_safe_pthread_join(pthread_t thread);
-void	ft_safe_mutex_handle(pthread_mutex_t *mutex, t_action action);
+int		ft_safe_pthread_create(pthread_t *thread, void *(*f)(void *), void *d);
+int		ft_safe_pthread_join(pthread_t thread);
+int		ft_safe_mutex_handle(pthread_mutex_t *mutex, t_action action);
 
 #endif

@@ -6,32 +6,32 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:23:45 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/19 15:06:42 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 14:08:44 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static bool	ft_philo_died(t_philo *philo)
+inline int	ft_death(t_philo *philo)
+{
+	return (ft_write_status(philo, DEATH));
+}
+
+static int	ft_philo_died(t_philo *philo)
 {
 	long	elapsed;
 	long	start_time;
 	long	last_meal;
-	long	since_beginning; // delete later
 
 	last_meal = ft_get_long(&philo->mutex, &philo->last_meal);
+	if (last_meal < 0)
+		return (-1);
 	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
+	if (start_time < 0)
+		return (-1);
 	elapsed = ft_get_utime() - last_meal;
-	since_beginning = ft_get_utime() - start_time; // delete later
-	if (elapsed > philo->table->time_to_die
-		&& start_time < last_meal)
-	{
-		printf("Elapsed since:\n"); // delete later
-		printf("beginning: %ld\n", since_beginning); // delete later
-		printf("last meal: %ld\n", elapsed); // delete later
-		printf("meals: %ld\n", ft_get_long(&philo->mutex, &philo->meals)); // delete later
+	if (elapsed > philo->table->time_to_die && start_time < last_meal)
 		return (true);
-	}
 	else
 		return (false);
 }
@@ -52,19 +52,20 @@ void	*ft_monitoring(void *data)
 		{
 			if (ft_philo_died(d->ph[i]))
 				return (ft_death(d->ph[i]), NULL);
-			else if (ft_get_bool(&d->ph[i]->mutex, &d->ph[i]->full))
+			else if (ft_get_bool(&d->ph[i]->mutex, &d->ph[i]->full) == 1)
 				full++;
 			if (full == d->number_of_philos)
 			{
 				printf("All philosophers are full!\n");
-				ft_set_bool(&d->mutex, &d->end, true);
+				if (!ft_set_bool(&d->mutex, &d->end, true))
+					return (NULL);
 			}
 		}
 	}
 	return (NULL);
 }
 
-void	ft_write_status(t_philo *philo, t_status status)
+int	ft_write_status(t_philo *philo, t_status status)
 {
 	long	elapsed;
 	long	start_time;
@@ -87,5 +88,6 @@ void	ft_write_status(t_philo *philo, t_status status)
 	else if (status == FULL && !ft_dinner_end(philo->table))
 		printf("😋 %ld %d is full. 😋\n", elapsed, philo->number);
 	else if (!ft_dinner_end(philo->table))
-		error_exit("Wrong status passed as argument.\n");
+		return (error_exit("Wrong status passed as argument.\n"));
+	return (1);
 }
