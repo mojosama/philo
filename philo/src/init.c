@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 11:36:13 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/20 14:04:42 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 16:41:20 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ int	ft_init(t_dinner *d, int ac, char **av)
 	d->end = false;
 	d->start_time = 0;
 	if (!ft_safe_mutex_handle(&d->mutex, INIT))
+		return (0);
+	if (!ft_safe_mutex_handle(&d->print_mutex, INIT))
 		return (0);
 	if (!ft_init_forks(d) || !ft_init_philos(d))
 		return (0);

@@ -6,15 +6,24 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:23:45 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/20 15:05:15 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 16:48:32 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-inline int	ft_death(t_philo *philo)
+static inline int	ft_death(t_philo *philo)
 {
-	return (ft_write_status(philo, DEATH));
+	long	elapsed;
+	long	start_time;
+
+	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
+	elapsed = (long)((ft_get_utime() - start_time) * 0.001);	
+	if (!ft_set_bool(&philo->table->mutex, &philo->table->end, true))
+		return (0);
+	printf("💀 %ld %d died. 💀\n", elapsed, philo->number);
+	return (1);
+	// return (ft_write_status(philo, DEATH));
 }
 
 static int	ft_philo_died(t_philo *philo)
@@ -71,7 +80,11 @@ int	ft_write_status(t_philo *philo, t_status status)
 	long	start_time;
 
 	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
+	if (start_time < 0)
+		return (0);
 	elapsed = (long)((ft_get_utime() - start_time) * 0.001);
+	if (!ft_safe_mutex_handle(&philo->table->print_mutex, LOCK))
+		return (0);
 	if (status == EAT && !ft_dinner_end(philo->table))
 		printf("🍝 %ld %d is eating. 🍝\n", elapsed, philo->number);
 	else if (status == SLEEP && !ft_dinner_end(philo->table))
@@ -80,15 +93,9 @@ int	ft_write_status(t_philo *philo, t_status status)
 		printf("💭 %ld %d is thinking. 💭\n", elapsed, philo->number);
 	else if (status == FORK && !ft_dinner_end(philo->table))
 		printf("🍴 %ld %d has taken a fork. 🍴\n", elapsed, philo->number);
-	else if (status == DEATH && !ft_dinner_end(philo->table))
-	{
-		if (!ft_set_bool(&philo->table->mutex, &philo->table->end, true))
-			return (0);
-		printf("💀 %ld %d died. 💀\n", elapsed, philo->number);
-	}
 	else if (status == FULL && !ft_dinner_end(philo->table))
 		printf("😋 %ld %d is full. 😋\n", elapsed, philo->number);
-	else if (!ft_dinner_end(philo->table))
-		return (error_exit("Wrong status passed as argument.\n"));
+	if (!ft_safe_mutex_handle(&philo->table->print_mutex, UNLOCK))
+		return (0);
 	return (1);
 }

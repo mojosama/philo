@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:55:02 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/20 13:56:18 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/20 16:44:35 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_dinner
 	bool			threads_ready;
 	pthread_t		monitor;
 	pthread_mutex_t	mutex;
+	pthread_mutex_t	print_mutex;
 }				t_dinner;
 
 /*		lib_utils.c		*/
@@ -98,7 +99,6 @@ long	ft_get_long(pthread_mutex_t *mutex, long *dest);
 int		ft_dinner_end(t_dinner *d);
 
 /*		monitoring.c	*/
-int		ft_death(t_philo *philo);
 void	*ft_monitoring(void *data);
 int		ft_write_status(t_philo *philo, t_status status);
 
