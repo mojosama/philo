@@ -30,25 +30,16 @@ DIR_INCS	=	includes/
 
 INCLUDES	=	$(addprefix -I , $(DIR_INCS))
 
-all: $(NAME)
-
-$(NAME): $(OBJS)
-	$(CC) $(FLAGS) $(OBJS) -o $(NAME)
-
-#	RAJOUTER $(HEADERS) AUX DEPENDENCES
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
-	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
-
-# .depend: $(SRCS)
-# 	$(CC) $(FLAGS) -MM @(SRCS)
-
-# $(OBJ_DIR)%.o:
-# 	$(CC) -c $(FLAGS) $< -o $@
-
-# -include .depend
+all: $(OBJ_DIR) $(NAME)
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(DIR_INCS)$(HEADERS)
+	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+
+$(NAME): $(OBJS)
+	$(CC) $(FLAGS) $^ -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
