@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:23:45 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/20 16:48:32 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/21 15:00:52 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ static inline int	ft_death(t_philo *philo)
 	long	start_time;
 
 	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
-	elapsed = (long)((ft_get_utime() - start_time) * 0.001);	
+	elapsed = (long)((ft_get_utime() - start_time) * 0.001);
 	if (!ft_set_bool(&philo->table->mutex, &philo->table->end, true))
 		return (0);
 	printf("💀 %ld %d died. 💀\n", elapsed, philo->number);
 	return (1);
-	// return (ft_write_status(philo, DEATH));
 }
 
 static int	ft_philo_died(t_philo *philo)
