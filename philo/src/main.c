@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 11:58:41 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/18 16:25:29 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/25 19:00:56 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	ft_free(t_dinner *d)
 		if (d->forks)
 			free(d->forks);
 		ft_safe_mutex_handle(&d->mutex, DESTROY);
+		ft_safe_mutex_handle(&d->print_mutex, DESTROY);
 		free(d);
 	}
 }

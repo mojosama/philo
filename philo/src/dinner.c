@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:47:50 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/20 17:43:42 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/29 13:31:06 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	wait_all_threads(t_dinner *d)
 {
 	while (ft_get_bool(&d->mutex, &d->threads_ready) != 1)
-		ft_usleep(50, d);
+		ft_usleep(10, d);
 }
 
 static void	*ft_solo(void *data)
@@ -45,7 +45,7 @@ static void	*ft_dining(void *data)
 	{
 		if (!ft_think(philo))
 			return (NULL);
-		ft_usleep(500, philo->table);
+		ft_usleep(philo->table->time_to_eat / 2, philo->table);
 	}
 	while (!ft_dinner_end(philo->table) && !philo->full)
 	{
@@ -53,7 +53,7 @@ static void	*ft_dining(void *data)
 			return (NULL);
 		if (!ft_sleep(philo))
 			return (NULL);
-		if (!ft_think(philo))
+		if (!philo->full && !ft_think(philo))
 			return (NULL);
 	}
 	return (NULL);

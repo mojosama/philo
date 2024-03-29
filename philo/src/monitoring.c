@@ -6,7 +6,7 @@
 /*   By: hlopez <hlopez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:23:45 by hlopez            #+#    #+#             */
-/*   Updated: 2024/03/21 15:00:52 by hlopez           ###   ########.fr       */
+/*   Updated: 2024/03/29 13:43:42 by hlopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,15 @@ static inline int	ft_death(t_philo *philo)
 	long	elapsed;
 	long	start_time;
 
-	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
-	elapsed = (long)((ft_get_utime() - start_time) * 0.001);
 	if (!ft_set_bool(&philo->table->mutex, &philo->table->end, true))
 		return (0);
+	start_time = ft_get_long(&philo->table->mutex, &philo->table->start_time);
+	elapsed = (long)((ft_get_utime() - start_time) * 0.001);
+	if (!ft_safe_mutex_handle(&philo->table->print_mutex, LOCK))
+		return (0);
 	printf("💀 %ld %d died. 💀\n", elapsed, philo->number);
+	if (!ft_safe_mutex_handle(&philo->table->print_mutex, UNLOCK))
+		return (0);
 	return (1);
 }
 
@@ -31,6 +35,8 @@ static int	ft_philo_died(t_philo *philo)
 	long	start_time;
 	long	last_meal;
 
+	if (ft_get_bool(&philo->mutex, &philo->full) == 1)
+		return (false);
 	last_meal = ft_get_long(&philo->mutex, &philo->last_meal);
 	if (last_meal < 0)
 		return (-1);
@@ -84,16 +90,19 @@ int	ft_write_status(t_philo *philo, t_status status)
 	elapsed = (long)((ft_get_utime() - start_time) * 0.001);
 	if (!ft_safe_mutex_handle(&philo->table->print_mutex, LOCK))
 		return (0);
-	if (status == EAT && !ft_dinner_end(philo->table))
-		printf("🍝 %ld %d is eating. 🍝\n", elapsed, philo->number);
-	else if (status == SLEEP && !ft_dinner_end(philo->table))
-		printf("💤 %ld %d is sleeping. 💤\n", elapsed, philo->number);
-	else if (status == THINK && !ft_dinner_end(philo->table))
-		printf("💭 %ld %d is thinking. 💭\n", elapsed, philo->number);
-	else if (status == FORK && !ft_dinner_end(philo->table))
-		printf("🍴 %ld %d has taken a fork. 🍴\n", elapsed, philo->number);
-	else if (status == FULL && !ft_dinner_end(philo->table))
-		printf("😋 %ld %d is full. 😋\n", elapsed, philo->number);
+	if (!ft_dinner_end(philo->table))
+	{
+		if (status == EAT)
+			printf("🍝 %ld %d is eating. 🍝\n", elapsed, philo->number);
+		else if (status == SLEEP)
+			printf("💤 %ld %d is sleeping. 💤\n", elapsed, philo->number);
+		else if (status == THINK)
+			printf("💭 %ld %d is thinking. 💭\n", elapsed, philo->number);
+		else if (status == FORK)
+			printf("🍴 %ld %d has taken a fork. 🍴\n", elapsed, philo->number);
+		else if (status == FULL)
+			printf("😋 %ld %d is full. 😋\n", elapsed, philo->number);
+	}
 	if (!ft_safe_mutex_handle(&philo->table->print_mutex, UNLOCK))
 		return (0);
 	return (1);
